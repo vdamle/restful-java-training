@@ -12,4 +12,9 @@ public class HelloResourceTest extends JerseyResourceTest<HelloResource> {
 		assertEquals("Hello!", hello);
 	}
 
+	@Test
+	public void helloResourceWithPath() {
+		String hello = target("/hello/Cisco").request().get(String.class);
+		assertEquals("Hello Cisco!", hello);
+	}
 }
