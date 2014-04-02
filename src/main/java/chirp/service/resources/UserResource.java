@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
@@ -17,6 +18,7 @@ import chirp.model.DuplicateEntityException;
 import chirp.model.NoSuchEntityException;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.UserRepresentation;
 
 @Path("/user")
 public class UserResource {
@@ -59,5 +61,12 @@ public class UserResource {
 			return Response.noContent().build();
 		}
 		return Response.ok().build();	
+	}
+
+	@GET
+	@Path("{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UserRepresentation getUser(@PathParam("username") String uName) {
+		return new UserRepresentation(userRepository.getUser(uName));
 	}
 }

@@ -18,6 +18,11 @@ public class User implements Serializable {
 	private final String realname;
 	private final Map<Timestamp, Post> posts = new TreeMap<Timestamp, Post>();
 
+	public User() {
+		username = null;
+		realname = null;
+	}
+	
 	public User(String username, String realname) {
 		this.username = username;
 		this.realname = realname;
@@ -26,7 +31,7 @@ public class User implements Serializable {
 	public String getUsername() {
 		return username;
 	}
-
+	
 	public String getRealname() {
 		return realname;
 	}

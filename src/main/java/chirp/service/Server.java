@@ -7,8 +7,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-
 import chirp.model.UserRepository;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 /**
  * Lightweight, embedded HTTP server. Knows how to load and save the user
@@ -24,7 +24,7 @@ public class Server {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
 
-		final ResourceConfig rc = new ResourceConfig()
+		final ResourceConfig rc = new ResourceConfig().register(JacksonFeature.class)
 				.packages("chirp.service.resources", "chirp.service.providers");
 
 		// create and start a new instance of grizzly http server

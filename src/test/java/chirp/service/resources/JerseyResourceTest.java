@@ -4,10 +4,12 @@ import java.lang.reflect.ParameterizedType;
 
 import javax.ws.rs.core.Application;
 
+import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 /**
  * Common base class for jerseytest classes that assumes a single servce to test
@@ -51,8 +53,14 @@ public abstract class JerseyResourceTest<R> extends JerseyTest {
 
 		// ResourceConfig is a Jersey specific javax.ws.rs.core.Application
 		// subclass
-		return new ResourceConfig().register(resourceClass).packages("chirp.service.providers");
+		return new ResourceConfig().register(resourceClass).packages("chirp.service.providers")
+				.register(JacksonFeature.class);
 
+	}
+	
+	@Override
+	protected void configureClient(ClientConfig config) {
+		config.register(JacksonFeature.class);
 	}
 
 }

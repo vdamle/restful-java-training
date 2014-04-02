@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.UserRepresentation;
 
 public class UserResourceTest extends JerseyResourceTest<UserResource> {
 	
@@ -66,6 +67,22 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		System.out.println("Sending duplicate request");
 		rsp = target("/user").request().post(Entity.form(userForm));
 		assertEquals(Response.Status.FORBIDDEN.getStatusCode(), rsp.getStatus());
+	}
+	
+	@Test
+	public void getUser() {
+		Form userForm = new Form().param("realname", "Gordon Force").param("username", "gordon");
+		/*
+		 * Return type from call below is a 'Response'
+		 */
+		Response rsp = target("/user").request().post(Entity.form(userForm));
+		/*
+		 * return code is a 201 (response content created
+		 */
+		assertEquals(Response.Status.CREATED.getStatusCode(), rsp.getStatus());
+		
+		UserRepresentation readUser = target(rsp.getLocation().getPath()).request().get(UserRepresentation.class);
+		assertEquals("gordon", readUser.getUsername());
 	}
 
 }
