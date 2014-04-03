@@ -29,10 +29,12 @@ public class UserRepresentation {
 		this.realname = realname;
 	}
 	
-	public UserRepresentation(User user) {
+	public UserRepresentation(User user,  boolean summary) {
 		this.self = UriBuilder.fromPath("user").path(user.getUsername()).build();
-		this.username = user.getUsername();
-		this.realname = user.getRealname();
+		if (summary == false) {
+			this.username = user.getUsername();
+			this.realname = user.getRealname();
+		}
 	}
 	
 	@XmlElement

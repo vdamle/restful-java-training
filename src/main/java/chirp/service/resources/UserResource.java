@@ -21,6 +21,7 @@ import chirp.model.DuplicateEntityException;
 import chirp.model.NoSuchEntityException;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.UserCollectionRepresentation;
 import chirp.service.representations.UserRepresentation;
 
 @Path("/user")
@@ -70,18 +71,12 @@ public class UserResource {
 	@Path("{username}")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public UserRepresentation getUser(@PathParam("username") String uName) {
-		return new UserRepresentation(userRepository.getUser(uName));
+		return new UserRepresentation(userRepository.getUser(uName), false);
 	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Collection<UserRepresentation> getAllUsers() {
-		
-		ArrayList<UserRepresentation> users = new ArrayList<>();
-		for (User user : userRepository.getUsers()) {
-			users.add(new UserRepresentation(user));
-		}
-		
-		return Collections.unmodifiableCollection(users);
+		return new UserCollectionRepresentation(userRepository.getUsers()).getAll();
 	}
 }

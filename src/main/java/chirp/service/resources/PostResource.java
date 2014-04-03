@@ -23,6 +23,7 @@ import chirp.model.Post;
 import chirp.model.Timestamp;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.PostCollectionRepresentation;
 import chirp.service.representations.PostRepresentation;
 import chirp.service.representations.UserRepresentation;
 
@@ -46,18 +47,13 @@ public class PostResource {
 	public PostRepresentation getPost(@PathParam("username") String uName,
 									  @PathParam("timestamp") String timestamp) {
 		Timestamp ts = new Timestamp(timestamp);
-		return new PostRepresentation(userRepository.getUser(uName).getPost(ts));
+		return new PostRepresentation(userRepository.getUser(uName).getPost(ts), false);
 	}
 
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Collection<PostRepresentation> getAllPosts(@PathParam("username") String uName) {
 		User myUser = userRepository.getUser(uName);
-		Collection<PostRepresentation> posts = new ArrayList<>();
-		
-		for(Post post : myUser.getPosts()) {
-			posts.add(new PostRepresentation(post));
-		}
-		return Collections.unmodifiableCollection(posts);
+		return new PostCollectionRepresentation(myUser.getPosts(), myUser).getAll();
 	}
 }

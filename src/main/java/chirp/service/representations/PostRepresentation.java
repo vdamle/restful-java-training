@@ -31,10 +31,12 @@ public class PostRepresentation {
 		this.timestamp = timestamp;
 	}
 	
-	public PostRepresentation(Post post) {
+	public PostRepresentation(Post post, boolean summary) {
 		this.self = UriBuilder.fromPath("post").path(post.getUser().getUsername()).path(post.getTimestamp().toString()).build();
-		this.content = post.getContent();
-		this.timestamp = post.getTimestamp().toString();
+		if (summary == false) {
+			this.content = post.getContent();
+			this.timestamp = post.getTimestamp().toString();
+		}
 	}
 	
 	@XmlElement
