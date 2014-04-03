@@ -46,4 +46,9 @@ public class PostResourceTest extends JerseyResourceTest<PostResource> {
 		ArrayList<PostRepresentation> posts = target("/post/gordon").request().get(ArrayList.class);
 		assertEquals(2, posts.size());
 	}
+	
+	@Test
+	public void readPostCollectionSuccess() {
+		
+	}
 }
