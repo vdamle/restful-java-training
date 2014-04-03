@@ -6,13 +6,20 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import chirp.model.User;
 
+@XmlRootElement
 public class UserCollectionRepresentation {
 	
 	private Collection<UserRepresentation> userReps = new ArrayList<>();
 	private URI self;
+	
+	public UserCollectionRepresentation() {
+		
+	}
 
 	public UserCollectionRepresentation(Collection<User> users) {
 		for (User user : users) {
@@ -21,10 +28,12 @@ public class UserCollectionRepresentation {
 		self = UriBuilder.fromPath("/user").build();
 	}
 	
-	public Collection<UserRepresentation> getAll() {
+	@XmlElement
+	public Collection<UserRepresentation> getUser() {
 		return Collections.unmodifiableCollection(userReps);
 	}
 	
+	@XmlElement
 	public URI getSelf() {
 		return self;
 	}

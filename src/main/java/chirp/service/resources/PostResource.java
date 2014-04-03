@@ -52,8 +52,8 @@ public class PostResource {
 
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Collection<PostRepresentation> getAllPosts(@PathParam("username") String uName) {
+	public PostCollectionRepresentation getAllPosts(@PathParam("username") String uName) {
 		User myUser = userRepository.getUser(uName);
-		return new PostCollectionRepresentation(myUser.getPosts(), myUser).getAll();
+		return new PostCollectionRepresentation(myUser.getPosts(), myUser);
 	}
 }

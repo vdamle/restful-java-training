@@ -3,6 +3,7 @@ package chirp.service.resources;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
@@ -94,9 +95,8 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		Response rsp = target("/user").request().post(Entity.form(userForm));
 		userForm = new Form().param("realname", "Vinod Damle").param("username", "vinod");
 		rsp = target("/user").request().post(Entity.form(userForm));
-		ArrayList<UserRepresentation> users = target("/user").request().get(ArrayList.class);
+		Collection<UserRepresentation> users = target("/user").request().get(ArrayList.class);
 		assertEquals(2, users.size());
-		
 	}
 
 }
