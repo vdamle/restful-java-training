@@ -13,9 +13,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import chirp.model.DuplicateEntityException;
 import chirp.model.NoSuchEntityException;
@@ -58,13 +60,14 @@ public class UserResource {
 	@HEAD
 	@Path("{username}")
 	public Response checkUser(@PathParam("username") String uName) {
-		User foundUser = null;
-		try {
-			foundUser = userRepository.getUser(uName);
-		} catch (NoSuchEntityException e){
-			return Response.noContent().build();
-		}
-		return Response.ok().build();	
+		User myUser = userRepository.getUser(uName);
+		
+		ResponseBuilder rb = Response.ok();
+		
+		rb.links(Link.fromUri("/user/" + uName).rel("self").title(myUser.getUsername()).build());
+		rb.links(Link.fromUri("/user/").rel("up").build());
+		
+		return rb.build();
 	}
 
 	@GET
