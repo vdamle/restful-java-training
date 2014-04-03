@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -61,11 +62,18 @@ public class UserResource {
 	@Path("{username}")
 	public Response checkUser(@PathParam("username") String uName) {
 		User myUser = userRepository.getUser(uName);
-		
+		final Iterator<User> itr = userRepository.getUsers().iterator();
+		User firstUser = itr.next();
+		User lastUser = firstUser;
+		while (itr.hasNext()) {
+			lastUser = itr.next();
+		}
 		ResponseBuilder rb = Response.ok();
 		
-		rb.links(Link.fromUri("/user/" + uName).rel("self").title(myUser.getUsername()).build());
 		rb.links(Link.fromUri("/user/").rel("up").build());
+		rb.links(Link.fromUri("/user/" + uName).rel("self").title(myUser.getUsername()).build());
+		rb.links(Link.fromUri("/user/" + firstUser.getUsername()).rel("first").build());
+		rb.links(Link.fromUri("/user/" + lastUser.getUsername()).rel("last").build());
 		
 		return rb.build();
 	}
