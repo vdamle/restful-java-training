@@ -2,6 +2,8 @@ package chirp.service.resources;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
@@ -12,6 +14,7 @@ import org.junit.Test;
 
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.PostRepresentation;
 import chirp.service.representations.UserRepresentation;
 
 public class UserResourceTest extends JerseyResourceTest<UserResource> {
@@ -83,6 +86,17 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		
 		UserRepresentation readUser = target(rsp.getLocation().getPath()).request().get(UserRepresentation.class);
 		assertEquals("gordon", readUser.getUsername());
+	}
+	
+	@Test
+	public void getAllUsers() {
+		Form userForm = new Form().param("realname", "Gordon Force").param("username", "gordon");
+		Response rsp = target("/user").request().post(Entity.form(userForm));
+		userForm = new Form().param("realname", "Vinod Damle").param("username", "vinod");
+		rsp = target("/user").request().post(Entity.form(userForm));
+		ArrayList<UserRepresentation> users = target("/user").request().get(ArrayList.class);
+		assertEquals(2, users.size());
+		
 	}
 
 }

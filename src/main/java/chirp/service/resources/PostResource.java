@@ -1,6 +1,9 @@
 package chirp.service.resources;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -23,13 +26,12 @@ import chirp.model.UserRepository;
 import chirp.service.representations.PostRepresentation;
 import chirp.service.representations.UserRepresentation;
 
-@Path("/post")
+@Path("/post/{username}")
 public class PostResource {
 
 	private UserRepository userRepository = UserRepository.getInstance();
 
 	@POST
-	@Path("{username}")
 	public Response createPost(@PathParam("username") String uName,
 						   @FormParam("content") String content) {
 		User postUser = userRepository.getUser(uName);
@@ -39,11 +41,23 @@ public class PostResource {
 	}
 
 	@GET
-	@Path("{username}/{timestamp}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{timestamp}")
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public PostRepresentation getPost(@PathParam("username") String uName,
 									  @PathParam("timestamp") String timestamp) {
 		Timestamp ts = new Timestamp(timestamp);
 		return new PostRepresentation(userRepository.getUser(uName).getPost(ts));
+	}
+
+	@GET
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Collection<PostRepresentation> getAllPosts(@PathParam("username") String uName) {
+		User myUser = userRepository.getUser(uName);
+		Collection<PostRepresentation> posts = new ArrayList<>();
+		
+		for(Post post : myUser.getPosts()) {
+			posts.add(new PostRepresentation(post));
+		}
+		return Collections.unmodifiableCollection(posts);
 	}
 }
