@@ -1,5 +1,8 @@
 package chirp.service.representations;
 
+import java.net.URI;
+
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,17 +18,21 @@ public class PostRepresentation {
 	
 	private String content;
 	private String timestamp;
+	private URI self;
 	
 	public PostRepresentation() { /* For xml representation */ }
 	
 	@JsonCreator
-	public PostRepresentation(@JsonProperty("content") String content,
+	public PostRepresentation(@JsonProperty("self") URI self,
+							  @JsonProperty("content") String content,
 							  @JsonProperty("timestamp") String timestamp) {
+		this.self = self;
 		this.content = content;
 		this.timestamp = timestamp;
 	}
 	
 	public PostRepresentation(Post post) {
+		this.self = UriBuilder.fromPath("post").path(post.getUser().getUsername()).path(post.getTimestamp().toString()).build();
 		this.content = post.getContent();
 		this.timestamp = post.getTimestamp().toString();
 	}
@@ -42,5 +49,10 @@ public class PostRepresentation {
 	@XmlElement
 	public String getTimestamp() {
 		return timestamp;
+	}
+	
+	@XmlElement
+	public URI getSelf() {
+		return self;
 	}
 }
