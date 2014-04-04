@@ -51,7 +51,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 
 		// validate that user was created by a HEAD or GET against the URI
 		rsp1 = target("/user/joe").request().head();
-		assertEquals(Response.Status.NO_CONTENT.getStatusCode(),
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
 				rsp1.getStatus());
 
 	}
